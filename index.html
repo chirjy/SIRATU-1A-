@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIRATU 1A E-KAS</title>
+  
+  <!-- PILIHAN ICON REL (FAVICON) YANG SESUAI THEMA KEUANGAN/DOMPET -->
+  <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/wallet.png">
+  
+  <!-- Tailwind CSS untuk Layouting Bingkai -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- FontAwesome untuk Icon Loading -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <style>
+    /* Menghilangkan scrollbar pada level body untuk kebersihan visual */
+    body {
+      overflow: hidden;
+    }
+    /* Animasi fade out untuk layar loading */
+    .fade-out {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 w-screen h-screen flex flex-col justify-between m-0 p-0 antialiased">
+
+  <!-- 1. INDIKATOR LOADING (Akan hilang otomatis setelah iframe termuat) -->
+  <div id="loading-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center gap-3 text-white">
+    <i class="fa-solid fa-circle-notch text-indigo-500 text-4xl animate-spin"></i>
+    <p class="text-xs font-semibold tracking-wider text-gray-400">Menghubungkan ke Server E-Kas...</p>
+  </div>
+
+  <!-- 2. BINGKAI IFRAME UTAMA (RESPONSIF DAN FULL SCREEN) -->
+  <main class="flex-1 w-full h-full relative bg-slate-50">
+    <!-- 
+      PENTING: Ganti URL src di bawah ini dengan URL Web App Apps Script versi "/exec" Anda yang terbaru 
+    -->
+    <iframe 
+      id="appscript-iframe"
+      src="https://script.google.com/macros/s/AKfycbyPvegLM6_emJHpl-OHjxhEe25E7jktqUNRIa8PACKyeSWqbrzLkz1rMZRTfxnogUfb/exec" 
+      class="absolute top-0 left-0 w-full h-full border-none m-0 p-0"
+      allow="clipboard-write"
+      onload="hilangkanLoading()">
+    </iframe>
+  </main>
+
+  <!-- LOGIKA JAVASCRIPT SEDERHANA UNTUK LOADING SCREEN -->
+  <script>
+    function hilangkanLoading() {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        // Hapus elemen dari DOM setelah animasi selesai agar hemat memori
+        setTimeout(() => loader.remove(), 500);
+      }
+    }
+
+    // Antisipasi jika server Google lambat, paksa hilangkan loading dalam 15 detik
+    setTimeout(hilangkanLoading, 15000);
+  </script>
+</body>
+</html>
